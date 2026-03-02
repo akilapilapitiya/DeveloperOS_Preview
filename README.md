@@ -1,4 +1,4 @@
-# Developer OS (v1.0)
+# Developer OS (Preview Only)
 
 [![GitLab CI/CD Pipeline Status](https://gitlab.com/akilapilapitiya/developeros/badges/test/pipeline.svg)](https://gitlab.com/akilapilapitiya/developeros/-/pipelines)
 
