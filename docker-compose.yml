@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: devos-postgres
+    environment:
+      POSTGRES_DB: developer_os
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devuser -d developer_os"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.0
+    container_name: devos-keycloak
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/developer_os
+      KC_DB_USERNAME: devuser
+      KC_DB_PASSWORD: devpassword
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm.json
+      - ./keycloak/themes:/opt/keycloak/themes
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: devos-ngrok
+    environment:
+      # Requires you to set NGROK_AUTHTOKEN in your shell or .env
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN:-}
+    command:
+      # Points to your local machine (where Spring Boot runs on 8081)
+      - "http"
+      - "host.docker.internal:8081"
+    ports:
+      - "4040:4040" # ngrok local web interface
+
+volumes:
+  postgres_data:

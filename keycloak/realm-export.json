@@ -1,0 +1,28 @@
+{
+  "realm": "developer-os",
+  "enabled": true,
+  "loginTheme": "developer-os",
+  "clients": [
+    {
+      "clientId": "backend-api",
+      "enabled": true,
+      "bearerOnly": false,
+      "publicClient": false,
+      "secret": "backend-api-secret",
+      "serviceAccountsEnabled": true,
+      "directAccessGrantsEnabled": true
+    },
+    {
+      "clientId": "frontend-client",
+      "enabled": true,
+      "publicClient": true,
+      "bearerOnly": false,
+      "redirectUris": [
+        "http://localhost:5173/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173"
+      ]
+    }
+  ]
+}

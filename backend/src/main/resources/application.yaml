@@ -1,0 +1,49 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: backend
+  datasource:
+    url: jdbc:postgresql://localhost:5433/developer_os
+    username: devuser
+    password: devpassword
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/developer-os
+  github:
+    app-id: ${GITHUB_APP_ID:}
+    app-slug: ${GITHUB_APP_SLUG:developer-os}
+    client-id: ${GITHUB_CLIENT_ID:}
+    client-secret: ${GITHUB_CLIENT_SECRET:}
+    private-key: ${GITHUB_PRIVATE_KEY:}
+    webhook-secret: ${GITHUB_WEBHOOK_SECRET:}
+
+gitlab:
+  project-id: ${GITLAB_PROJECT_ID:}
+  trigger-token: ${GITLAB_TRIGGER_TOKEN:}
+  api-url: ${GITLAB_API_URL:https://gitlab.com}
+  target-branch: ${GITLAB_TARGET_BRANCH:test}
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    devos.backend: DEBUG
+
+app:
+  storage:
+    location: /Users/akila/Developer/DeveloperOS/storage/banners
+    avatars: /Users/akila/Developer/DeveloperOS/storage/avatars
